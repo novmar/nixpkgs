@@ -7,8 +7,8 @@
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
 , withOnlyInstalledCommunityModules ? [ ]
-, withCommunityModules ? [ ]
-, withOwnerAllowKickPatch ? false }:
+, withOwnerAllowKickPatch ? false
+, withCommunityModules ? [ ] }
 
 with lib;
 
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     "--with-lua-include=${luaEnv}/include"
     "--with-lua=${luaEnv}"
   ];
+
   postBuild = ''
     make -C tools/migration
   '';
