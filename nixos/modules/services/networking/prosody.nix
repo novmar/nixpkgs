@@ -338,8 +338,10 @@ let
       allowners_muc = mkOption {
         type = types.bool;
         default = false;
-        description = "Add module allowners, any user in chat is able to
-          kick other. Usefull in jitsi-meet to kick ghosts. "
+        description = ''
+          Add module allowners, any user in chat is able to
+          kick other. Usefull in jitsi-meet to kick ghosts.
+        '';
     };
 
       vcard_muc = mkOption {
