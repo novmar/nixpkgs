@@ -6,7 +6,7 @@
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
 , withOnlyInstalledCommunityModules ? [ ]
-, withExtraPatche ? [ ]
+, withCommunityModules ? [ ]
 , withOwnerAllowKickPatch ? false }:
 
 with lib;
