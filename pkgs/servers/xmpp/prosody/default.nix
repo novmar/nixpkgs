@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
         --prefix LUA_PATH ';' "$LUA_PATH" \
         --prefix LUA_CPATH ';' "$LUA_CPATH"
       ${lib.optionalString withOwnerAllowKickPatch ''
-        cat ${pkgs.jitsi-meet-prosody}/share/prosody-plugins/muc_owner_allow_kick.patch > $out/lib/modules/test
+        cat ${pkgs.jitsi-meet-prosody}/share/prosody-plugins/muc_owner_allow_kick.patch > $out/lib/prosody/modules/test
         ''}
     '';
 
