@@ -197,7 +197,7 @@ in
         {
           domain = "conference.${cfg.hostName}";
           name = "Jitsi Meet MUC";
-          allowners_muc = ${cfg.prosody.allowners_muc};
+          allowners_muc = "${cfg.prosody.allowners_muc}";
           roomLocking = false;
           roomDefaultPublicJids = true;
           extraConfig = ''
