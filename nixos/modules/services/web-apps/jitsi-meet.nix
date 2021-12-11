@@ -193,6 +193,7 @@ in
           roomDefaultPublicJids = true;
           extraConfig = ''
             storage = "memory"
+            modules_enabled = { "mod_muc_allowners"; }
           '';
         }
         {
