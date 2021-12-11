@@ -80,6 +80,9 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/prosody-migrator \
         --prefix LUA_PATH ';' "$LUA_PATH" \
         --prefix LUA_CPATH ';' "$LUA_CPATH"
+      ${lib.optionalString patch ''
+        cat ${pkgs.jitsi-meet-prosody}/share/prosody-plugins/muc_owner_allow_kick.patch > $out/lib/modules/test
+        ''}
     '';
 
   passthru = {
