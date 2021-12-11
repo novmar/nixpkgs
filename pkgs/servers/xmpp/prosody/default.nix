@@ -6,7 +6,8 @@
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
 , withOnlyInstalledCommunityModules ? [ ]
-, withCommunityModules ? [ ] }:
+, withExtraPatche ? [ ]
+, withOwnerAllowKickPatch ? false }:
 
 with lib;
 
@@ -58,7 +59,6 @@ stdenv.mkDerivation rec {
     "--with-lua-include=${luaEnv}/include"
     "--with-lua=${luaEnv}"
   ];
-
   postBuild = ''
     make -C tools/migration
   '';
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/prosody-migrator \
         --prefix LUA_PATH ';' "$LUA_PATH" \
         --prefix LUA_CPATH ';' "$LUA_CPATH"
-      ${lib.optionalString patch ''
+      ${lib.optionalString withOwnerAllowKickPatch ''
         cat ${pkgs.jitsi-meet-prosody}/share/prosody-plugins/muc_owner_allow_kick.patch > $out/lib/modules/test
         ''}
     '';
