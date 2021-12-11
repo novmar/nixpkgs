@@ -169,7 +169,7 @@ in
         off if you want to configure it manually.
       '';
     };
-    prosody.allowners_muc  {
+    prosody.allowners_muc  = mkOption {
       type = bool;
       default = false;
       description = ''
