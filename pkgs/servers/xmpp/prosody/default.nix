@@ -8,7 +8,7 @@
 , withExtraLibs ? [ ]
 , withOnlyInstalledCommunityModules ? [ ]
 , withOwnerAllowKickPatch ? false
-, withCommunityModules ? [ ] }
+, withCommunityModules ? [ ] }:
 
 with lib;
 
