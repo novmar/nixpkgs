@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.jitsi.org/jitsi-meet/src/jitsi-meet-${version}.tar.bz2";
-    sha256 = "DJk+2EAADIz3Jck5Tf3AMWq0pZn3q1JQpDm/VdIz7nc=";
+    sha256 = "pwt1R/LkTCUtAi/LhidU6wvhrRCVo5N8EYBT/qnkMew=";
   };
 
   dontBuild = true;
