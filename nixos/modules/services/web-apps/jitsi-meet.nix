@@ -193,7 +193,7 @@ in
       xmppComplianceSuite = mkDefault false;
 
       package = mkIf cfg.prosody.withOwnerAllowKickPatch (
-        kgs.prosody.override { withOwnerAllowKickPatch = true ;    }
+        pkgs.prosody.override { withOwnerAllowKickPatch = true ;    }
          );
 
       modules = {
