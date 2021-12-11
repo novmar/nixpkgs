@@ -1,5 +1,6 @@
 { stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
 , lua
+, pkgs
 , nixosTests
 , withLibevent ? true
 , withDBI ? true
