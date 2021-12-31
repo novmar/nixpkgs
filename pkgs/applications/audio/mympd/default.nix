@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mympd";
-  version = "8.0.4";
+  version = "9.0.2";
 
   src = fetchFromGitHub {
     owner = "jcorporation";
