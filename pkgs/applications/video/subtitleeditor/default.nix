@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "subtitleeditor";
-  version = "unstable-2019-11-30";
+  version = "0.54.0";
 
   src = fetchFromGitHub {
     owner = "kitone";
     repo = "subtitleeditor";
-    rev = "4c215f4cff4483c44361a2f1d45efc4c6670787f";
-    sha256 = "sha256-1Q1nd3GJ6iDGQv4SM2S1ehVW6kPdbqTn8KTtTb0obiQ=";
+    rev = version;
+    sha256 = "0vxcscc9m6gymgj173ahk2g9hlk9588z5fdaavmkpyriqdlhwm11";
   };
 
   nativeBuildInputs =  [
