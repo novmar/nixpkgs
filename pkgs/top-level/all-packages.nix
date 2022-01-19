@@ -972,8 +972,6 @@ with pkgs;
 
   airspyhf = callPackage ../applications/radio/airspyhf { };
 
-  airtame = callPackage ../applications/misc/airtame { };
-
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
   ajour = callPackage ../tools/games/ajour {
@@ -3108,6 +3106,8 @@ with pkgs;
 
   ghdorker = callPackage ../tools/security/ghdorker { };
 
+  ghidra = callPackage ../tools/security/ghidra/build.nix { };
+
   ghidra-bin = callPackage ../tools/security/ghidra { };
 
   gif-for-cli = callPackage ../tools/misc/gif-for-cli { };
@@ -4662,7 +4662,7 @@ with pkgs;
   diffutils = callPackage ../tools/text/diffutils { };
 
   dir2opus = callPackage ../tools/audio/dir2opus {
-    inherit (pythonPackages) mutagen python wrapPython;
+    inherit (python2Packages) mutagen python wrapPython;
   };
 
   dirdiff = callPackage ../tools/text/dirdiff {
@@ -4927,8 +4927,8 @@ with pkgs;
 
   timeline = callPackage ../applications/office/timeline { };
 
-  tsm-client = callPackage ../tools/backup/tsm-client { jdk8 = null; };
-  tsm-client-withGui = callPackage ../tools/backup/tsm-client { };
+  tsm-client = callPackage ../tools/backup/tsm-client { };
+  tsm-client-withGui = callPackage ../tools/backup/tsm-client { enableGui = true; };
 
   tracker = callPackage ../development/libraries/tracker { };
 
@@ -8919,8 +8919,6 @@ with pkgs;
 
   pastebinit = callPackage ../tools/misc/pastebinit { };
 
-  pifi = callPackage ../applications/audio/pifi { };
-
   pmacct = callPackage ../tools/networking/pmacct { };
 
   pmix = callPackage ../development/libraries/pmix { };
@@ -9593,6 +9591,8 @@ with pkgs;
   sigi = callPackage ../applications/misc/sigi { };
 
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
+
+  signalbackup-tools = callPackage ../applications/networking/instant-messengers/signalbackup-tools { };
 
   signald = callPackage ../applications/networking/instant-messengers/signald { };
 
@@ -10698,7 +10698,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
 
-  wakatime = pythonPackages.callPackage ../tools/misc/wakatime { };
+  wakatime = python2Packages.callPackage ../tools/misc/wakatime { };
 
   weather = callPackage ../applications/misc/weather { };
 
@@ -13251,7 +13251,6 @@ with pkgs;
   vala-lint = callPackage ../development/tools/vala-lint { };
 
   inherit (callPackage ../development/compilers/vala { })
-    vala_0_40
     vala_0_48
     vala_0_52
     vala_0_54
@@ -13481,6 +13480,10 @@ with pkgs;
 
   io = callPackage ../development/interpreters/io { };
 
+  ivy = callPackage ../development/interpreters/ivy {
+    buildGoModule = buildGo117Module;
+  };
+
   j = callPackage ../development/interpreters/j {
     stdenv = clangStdenv;
   };
@@ -13526,9 +13529,6 @@ with pkgs;
 
   lolcode = callPackage ../development/interpreters/lolcode { };
 
-  love_0_7 = callPackage ../development/interpreters/love/0.7.nix { lua=lua5_1; };
-  love_0_8 = callPackage ../development/interpreters/love/0.8.nix { lua=lua5_1; };
-  love_0_9 = callPackage ../development/interpreters/love/0.9.nix { };
   love_0_10 = callPackage ../development/interpreters/love/0.10.nix { };
   love_11 = callPackage ../development/interpreters/love/11.nix { };
   love = love_0_10;
@@ -13654,7 +13654,6 @@ with pkgs;
   # Python interpreters. All standard library modules are included except for tkinter, which is
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
-  python = python2;
   python2 = python27;
   python3 = python39;
   pypy = pypy2;
@@ -13663,11 +13662,6 @@ with pkgs;
 
   # Python interpreter that is build with all modules, including tkinter.
   # These are for compatibility and should not be used inside Nixpkgs.
-  pythonFull = python.override {
-    self = pythonFull;
-    pythonAttr = "pythonFull";
-    x11Support = true;
-  };
   python2Full = python2.override {
     self = python2Full;
     pythonAttr = "python2Full";
@@ -13704,7 +13698,6 @@ with pkgs;
   };
 
   # pythonPackages further below, but assigned here because they need to be in sync
-  pythonPackages = python.pkgs;
   python2Packages = python2.pkgs;
   python3Packages = python3.pkgs;
 
@@ -19126,7 +19119,9 @@ with pkgs;
 
   openbabel2 = callPackage ../development/libraries/openbabel/2.nix { };
 
-  openbabel3 = callPackage ../development/libraries/openbabel { };
+  openbabel3 = callPackage ../development/libraries/openbabel {
+    python = python3;
+  };
 
   opencascade = callPackage ../development/libraries/opencascade {
     inherit (darwin.apple_sdk.frameworks) OpenCL Cocoa;
@@ -20754,6 +20749,8 @@ with pkgs;
     packages = [];
   };
 
+  rstudioServerWrapper = rstudioWrapper.override { rstudio = rstudio-server; };
+
   rPackages = dontRecurseIntoAttrs (callPackage ../development/r-modules {
     overrides = (config.rPackageOverrides or (_: {})) pkgs;
   });
@@ -20767,6 +20764,8 @@ with pkgs;
   alerta = callPackage ../servers/monitoring/alerta/client.nix { };
 
   alerta-server = callPackage ../servers/monitoring/alerta { };
+
+  alps = callPackage ../servers/alps {};
 
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix { };
   apacheHttpd = apacheHttpd_2_4;
@@ -21687,7 +21686,7 @@ with pkgs;
 
   qpid-cpp = callPackage ../servers/amqp/qpid-cpp {
     boost = boost155;
-    inherit (pythonPackages) buildPythonPackage qpid-python;
+    inherit (python2Packages) buildPythonPackage qpid-python;
   };
 
   qremotecontrol-server = callPackage ../servers/misc/qremotecontrol-server { };
@@ -23729,7 +23728,12 @@ with pkgs;
   nordzy-cursor-theme = callPackage ../data/icons/nordzy-cursor-theme { };
 
   inherit (callPackages ../data/fonts/noto-fonts {})
-    noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-emoji-blob-bin noto-fonts-extra;
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-cjk-serif
+    noto-fonts-emoji
+    noto-fonts-emoji-blob-bin
+    noto-fonts-extra;
 
   nuclear = callPackage ../applications/audio/nuclear { };
 
@@ -24446,7 +24450,13 @@ with pkgs;
 
   berry = callPackage ../applications/window-managers/berry { };
 
-  bespokesynth = callPackage ../applications/audio/bespokesynth { };
+  bespokesynth = callPackage ../applications/audio/bespokesynth {
+    inherit (darwin.apple_sdk.frameworks) Cocoa WebKit CoreServices CoreAudioKit;
+  };
+
+  bespokesynth-with-vst2 = bespokesynth.override {
+    enableVST2 = true;
+  };
 
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
@@ -25604,6 +25614,8 @@ with pkgs;
     pname = "firefox-devedition-bin";
     desktopName = "Firefox DevEdition";
   };
+
+  firefox_decrypt = python3Packages.callPackage ../tools/security/firefox_decrypt { };
 
   flac = callPackage ../applications/audio/flac { };
 
@@ -27190,7 +27202,9 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_01_0;
   };
 
-  monitor = callPackage ../applications/system/monitor { };
+  monitor = callPackage ../applications/system/monitor {
+    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  };
 
   moolticute = libsForQt5.callPackage ../applications/misc/moolticute { };
 
@@ -28045,6 +28059,10 @@ with pkgs;
 
   polymake = callPackage ../applications/science/math/polymake { };
 
+  pomotroid = callPackage ../applications/misc/pomotroid {
+    electron = electron_9;
+  };
+
   pond = callPackage ../applications/networking/instant-messengers/pond { };
 
   ponymix = callPackage ../applications/audio/ponymix { };
@@ -28361,6 +28379,10 @@ with pkgs;
 
   rofi-unwrapped = callPackage ../applications/misc/rofi { };
   rofi = callPackage ../applications/misc/rofi/wrapper.nix { };
+  rofi-wayland-unwrapped = callPackage ../applications/misc/rofi/wayland.nix { };
+  rofi-wayland = callPackage ../applications/misc/rofi/wrapper.nix {
+    rofi-unwrapped = rofi-wayland-unwrapped;
+  };
 
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
 
@@ -28381,6 +28403,8 @@ with pkgs;
   rstudio = libsForQt5.callPackage ../applications/editors/rstudio {
     jdk = jdk8;
   };
+
+  rstudio-server = rstudio.override { server = true; };
 
   rsync = callPackage ../applications/networking/sync/rsync (config.rsync or {});
   rrsync = callPackage ../applications/networking/sync/rsync/rrsync.nix {};
@@ -28505,7 +28529,9 @@ with pkgs;
 
   spideroak = callPackage ../applications/networking/spideroak { };
 
-  split2flac = callPackage ../applications/audio/split2flac { };
+  split2flac = callPackage ../applications/audio/split2flac {
+    inherit (python3.pkgs) mutagen;
+  };
 
   spotify-qt = libsForQt5.callPackage ../applications/audio/spotify-qt { };
 
@@ -29017,9 +29043,7 @@ with pkgs;
 
   topydo = callPackage ../applications/misc/topydo {};
 
-  torchat = callPackage ../applications/networking/instant-messengers/torchat {
-    inherit (pythonPackages) wrapPython wxPython;
-  };
+  torchat = callPackage ../applications/networking/instant-messengers/torchat { };
 
   torrential = callPackage ../applications/networking/p2p/torrential { };
 
@@ -30248,6 +30272,22 @@ with pkgs;
 
   drumkv1 = libsForQt5.callPackage ../applications/audio/drumkv1 { };
 
+  gshhg-gmt = callPackage ../applications/gis/gmt/gshhg.nix { };
+
+  eureka-editor = callPackage ../applications/misc/eureka-editor { };
+
+  eureka-ideas = callPackage ../applications/misc/eureka-ideas {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  fava = callPackage ../applications/office/fava {};
+
+  nux = callPackage ../tools/misc/nux { };
+
+  tts = callPackage ../tools/audio/tts { };
+
+  fslint = callPackage ../applications/misc/fslint { };
+
   ### GAMES
 
   _1oom = callPackage ../games/1oom { };
@@ -30270,7 +30310,7 @@ with pkgs;
 
   blockattack = callPackage ../games/blockattack { } ;
 
-  colobot = callPackage ../games/colobot {};
+  colobot = callPackage ../games/colobot { };
 
   doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
 
@@ -30365,7 +30405,7 @@ with pkgs;
   amoeba = callPackage ../games/amoeba { };
   amoeba-data = callPackage ../games/amoeba/data.nix { };
 
-  andyetitmoves = callPackage ../games/andyetitmoves {};
+  andyetitmoves = callPackage ../games/andyetitmoves { };
 
   angband = callPackage ../games/angband { };
 
@@ -30378,7 +30418,7 @@ with pkgs;
 
   armagetronad-dedicated = callPackage ../games/armagetronad { dedicatedServer = true; };
 
-  arena = callPackage ../games/arena {};
+  arena = callPackage ../games/arena { };
 
   arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis { };
 
@@ -30392,17 +30432,17 @@ with pkgs;
 
   astromenace = callPackage ../games/astromenace { };
 
-  atanks = callPackage ../games/atanks {};
+  atanks = callPackage ../games/atanks { };
 
-  azimuth = callPackage ../games/azimuth {};
+  azimuth = callPackage ../games/azimuth { };
 
   ballAndPaddle = callPackage ../games/ball-and-paddle {
     guile = guile_1_8;
   };
 
-  banner = callPackage ../games/banner {};
+  banner = callPackage ../games/banner { };
 
-  bastet = callPackage ../games/bastet {};
+  bastet = callPackage ../games/bastet { };
 
   black-hole-solver = callPackage ../games/black-hole-solver {
     inherit (perlPackages) PathTiny;
@@ -30487,12 +30527,12 @@ with pkgs;
   inherit (import ../games/crossfire pkgs)
     crossfire-server crossfire-arch crossfire-maps crossfire-client;
 
-  crrcsim = callPackage ../games/crrcsim {};
+  crrcsim = callPackage ../games/crrcsim { };
 
   curseofwar = callPackage ../games/curseofwar { SDL = null; };
   curseofwar-sdl = callPackage ../games/curseofwar { ncurses = null; };
 
-  cutemaze = libsForQt5.callPackage ../games/cutemaze {};
+  cutemaze = libsForQt5.callPackage ../games/cutemaze { };
 
   cuyo = callPackage ../games/cuyo { };
 
@@ -30507,7 +30547,7 @@ with pkgs;
     };
   };
 
-  dhewm3 = callPackage ../games/dhewm3 {};
+  dhewm3 = callPackage ../games/dhewm3 { };
 
   domination = callPackage ../games/domination { };
 
@@ -30555,12 +30595,6 @@ with pkgs;
 
   eternity = callPackage ../games/eternity-engine { };
 
-  eureka-editor = callPackage ../applications/misc/eureka-editor { };
-
-  eureka-ideas = callPackage ../applications/misc/eureka-ideas {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   extremetuxracer = callPackage ../games/extremetuxracer {
     libpng = libpng12;
   };
@@ -30589,13 +30623,11 @@ with pkgs;
 
   factorio-utils = callPackage ../games/factorio/utils.nix { };
 
-  fairymax = callPackage ../games/fairymax {};
+  fairymax = callPackage ../games/fairymax { };
 
-  fava = callPackage ../applications/office/fava {};
+  fheroes2 = callPackage ../games/fheroes2 { };
 
-  fheroes2 = callPackage ../games/fheroes2 {};
-
-  fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
+  fish-fillets-ng = callPackage ../games/fish-fillets-ng { };
 
   fishfight = callPackage ../games/fishfight {
     inherit (xorg) libX11 libXi;
@@ -30641,8 +30673,6 @@ with pkgs;
     };
   };
 
-  fslint = callPackage ../applications/misc/fslint {};
-
   galaxis = callPackage ../games/galaxis { };
 
   gambatte = callPackage ../games/gambatte { };
@@ -30661,9 +30691,9 @@ with pkgs;
 
   gemrb = callPackage ../games/gemrb { };
 
-  gimx = callPackage ../games/gimx {};
+  gimx = callPackage ../games/gimx { };
 
-  gl117 = callPackage ../games/gl-117 {};
+  gl117 = callPackage ../games/gl-117 { };
 
   globulation2 = callPackage ../games/globulation {
     boost = boost155;
@@ -30689,13 +30719,11 @@ with pkgs;
 
   gnushogi = callPackage ../games/gnushogi { };
 
-  gogui = callPackage ../games/gogui {};
+  gogui = callPackage ../games/gogui { };
 
-  gscrabble = python3Packages.callPackage ../games/gscrabble {};
+  gscrabble = python3Packages.callPackage ../games/gscrabble { };
 
-  gshogi = python3Packages.callPackage ../games/gshogi {};
-
-  gshhg-gmt = callPackage ../applications/gis/gmt/gshhg.nix { };
+  gshogi = python3Packages.callPackage ../games/gshogi { };
 
   qtads = qt5.callPackage ../games/qtads { };
 
@@ -30709,13 +30737,11 @@ with pkgs;
 
   gtypist = callPackage ../games/gtypist { };
 
-  gweled = callPackage ../games/gweled {};
+  gweled = callPackage ../games/gweled { };
 
   gzdoom = callPackage ../games/gzdoom { };
 
   harmonist = callPackage ../games/harmonist { };
-
-  hawkthorne = callPackage ../games/hawkthorne { love = love_0_9; };
 
   hedgewars = libsForQt514.callPackage ../games/hedgewars {
     inherit (haskellPackages) ghcWithPackages;
@@ -30757,7 +30783,7 @@ with pkgs;
     enableGPU = false;
   };
 
-  klavaro = callPackage ../games/klavaro {};
+  klavaro = callPackage ../games/klavaro { };
 
   kobodeluxe = callPackage ../games/kobodeluxe { };
 
@@ -30779,7 +30805,7 @@ with pkgs;
 
   liberation-circuit = callPackage ../games/liberation-circuit { };
 
-  lincity = callPackage ../games/lincity {};
+  lincity = callPackage ../games/lincity { };
 
   lincity_ng = callPackage ../games/lincity/ng.nix {
     # https://github.com/lincity-ng/lincity-ng/issues/25
@@ -30793,7 +30819,7 @@ with pkgs;
   liquidwar5 = callPackage ../games/liquidwar/5.nix {
   };
 
-  lugaru = callPackage ../games/lugaru {};
+  lugaru = callPackage ../games/lugaru { };
 
   macopix = callPackage ../games/macopix {
     gtk = gtk2;
@@ -30805,7 +30831,7 @@ with pkgs;
 
   mars = callPackage ../games/mars { };
 
-  megaglest = callPackage ../games/megaglest {};
+  megaglest = callPackage ../games/megaglest { };
 
   methane = callPackage ../games/methane { };
 
@@ -30828,7 +30854,7 @@ with pkgs;
   minecraftServers = import ../games/minecraft-servers { inherit callPackage lib javaPackages; };
   minecraft-server = minecraftServers.vanilla; # backwards compatibility
 
-  moon-buggy = callPackage ../games/moon-buggy {};
+  moon-buggy = callPackage ../games/moon-buggy { };
 
   inherit (callPackages ../games/minetest {
     inherit (darwin) libiconv;
@@ -30874,15 +30900,11 @@ with pkgs;
 
   nexuiz = callPackage ../games/nexuiz { };
 
-  nux = callPackage ../tools/misc/nux { };
-
   ninvaders = callPackage ../games/ninvaders { };
 
   njam = callPackage ../games/njam { };
 
   newtonwars = callPackage ../games/newtonwars { };
-
-  nottetris2 = callPackage ../games/nottetris2 { };
 
   nudoku = callPackage ../games/nudoku { };
 
@@ -30912,8 +30934,6 @@ with pkgs;
 
   portmod = callPackage ../games/portmod { };
 
-  tlauncher = callPackage ../games/tlauncher {};
-
   tr-patcher = callPackage ../games/tr-patcher { };
 
   tes3cmd = callPackage ../games/tes3cmd { };
@@ -30940,8 +30960,8 @@ with pkgs;
       static = true;
     };
   };
-  openttd-grfcodec = callPackage ../games/openttd/grfcodec.nix {};
-  openttd-nml = callPackage ../games/openttd/nml.nix {};
+  openttd-grfcodec = callPackage ../games/openttd/grfcodec.nix { };
+  openttd-nml = callPackage ../games/openttd/nml.nix { };
 
   opentyrian = callPackage ../games/opentyrian { };
 
@@ -30963,7 +30983,7 @@ with pkgs;
 
   pinball = callPackage ../games/pinball { };
 
-  pingus = callPackage ../games/pingus {};
+  pingus = callPackage ../games/pingus { };
 
   pioneer = callPackage ../games/pioneer { };
 
@@ -31007,7 +31027,7 @@ with pkgs;
   ioquake3 = callPackage ../games/quake3/ioquake { };
   quake3e = callPackage ../games/quake3/quake3e { };
 
-  quantumminigolf = callPackage ../games/quantumminigolf {};
+  quantumminigolf = callPackage ../games/quantumminigolf { };
 
   r2mod_cli = callPackage ../games/r2mod_cli { };
 
@@ -31034,8 +31054,6 @@ with pkgs;
 
   rili = callPackage ../games/rili { };
 
-  rimshot = callPackage ../games/rimshot { love = love_0_7; };
-
   rogue = callPackage ../games/rogue {
     ncurses = ncurses5;
   };
@@ -31058,7 +31076,7 @@ with pkgs;
     openjdk = openjdk8;
   };
 
-  sauerbraten = callPackage ../games/sauerbraten {};
+  sauerbraten = callPackage ../games/sauerbraten { };
 
   scid = callPackage ../games/scid {
     tcl = tcl-8_5;
@@ -31131,7 +31149,7 @@ with pkgs;
 
   ssl-cert-check = callPackage ../tools/admin/ssl-cert-check { };
 
-  stardust = callPackage ../games/stardust {};
+  stardust = callPackage ../games/stardust { };
 
   starspace = callPackage ../applications/science/machine-learning/starspace { };
 
@@ -31233,8 +31251,6 @@ with pkgs;
 
   tremulous = callPackage ../games/tremulous { };
 
-  tts = callPackage ../tools/audio/tts { };
-
   tumiki-fighters = callPackage ../games/tumiki-fighters { };
 
   tuxpaint = callPackage ../games/tuxpaint { };
@@ -31288,8 +31304,6 @@ with pkgs;
   ut2004Packages = dontRecurseIntoAttrs (callPackage ../games/ut2004 { });
 
   ut2004demo = res.ut2004Packages.ut2004 [ res.ut2004Packages.ut2004-demo ];
-
-  vapor = callPackage ../games/vapor { love = love_0_8; };
 
   vapoursynth = callPackage ../development/libraries/vapoursynth {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
@@ -31377,8 +31391,8 @@ with pkgs;
 
 
   xpilot-ng = callPackage ../games/xpilot { };
-  bloodspilot-server = callPackage ../games/xpilot/bloodspilot-server.nix {};
-  bloodspilot-client = callPackage ../games/xpilot/bloodspilot-client.nix {};
+  bloodspilot-server = callPackage ../games/xpilot/bloodspilot-server.nix { };
+  bloodspilot-client = callPackage ../games/xpilot/bloodspilot-client.nix { };
 
   xskat = callPackage ../games/xskat { };
 
@@ -31427,6 +31441,10 @@ with pkgs;
 
   _0verkill = callPackage ../games/0verkill { };
 
+  hhexen = callPackage ../games/hhexen { };
+
+  wyvern = callPackage ../games/wyvern { };
+
   ### DESKTOP ENVIRONMENTS
 
   cdesktopenv = callPackage ../desktops/cdesktopenv { };
@@ -31455,8 +31473,6 @@ with pkgs;
   gnome-text-editor = callPackage ../desktops/gnome/apps/gnome-text-editor { };
 
   gnome-tour = callPackage ../desktops/gnome/core/gnome-tour { };
-
-  hhexen = callPackage ../games/hhexen { };
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
 
@@ -31701,7 +31717,7 @@ with pkgs;
     useMpi = true;
   });
 
-  neuron-full = neuron-mpi.override { inherit python; };
+  neuron-full = neuron-mpi.override { python = python2; };
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
@@ -33204,7 +33220,7 @@ with pkgs;
 
   nix-script = callPackage ../tools/nix/nix-script {};
 
-  nix-template-rpm = callPackage ../build-support/templaterpm { inherit (pythonPackages) python toposort; };
+  nix-template-rpm = callPackage ../build-support/templaterpm { inherit (python2Packages) python toposort; };
 
   nix-top = callPackage ../tools/package-management/nix-top { };
 
@@ -33255,7 +33271,7 @@ with pkgs;
   disnix = callPackage ../tools/package-management/disnix { };
 
   dysnomia = callPackage ../tools/package-management/disnix/dysnomia (config.disnix or {
-    inherit (pythonPackages) supervisor;
+    inherit (python2Packages) supervisor;
   });
 
   dydisnix = callPackage ../tools/package-management/disnix/dydisnix { };
@@ -33586,7 +33602,6 @@ with pkgs;
     buildGoModule = buildGo117Module;
   })
     mkTerraform
-    terraform_0_12
     terraform_0_13
     terraform_0_14
     terraform_0_15
@@ -33845,8 +33860,6 @@ with pkgs;
   wxsqliteplus = callPackage ../development/libraries/wxsqliteplus {
     wxGTK = wxGTK30;
   };
-
-  wyvern = callPackage ../games/wyvern { };
 
   x11idle = callPackage ../tools/misc/x11idle {};
 

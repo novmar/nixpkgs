@@ -1240,8 +1240,6 @@ in {
 
   blis = callPackage ../development/python-modules/blis { };
 
-  blist = callPackage ../development/python-modules/blist { };
-
   blockchain = callPackage ../development/python-modules/blockchain { };
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
@@ -1991,6 +1989,8 @@ in {
   datadog = callPackage ../development/python-modules/datadog { };
 
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
+
+  dataset = callPackage ../development/python-modules/dataset { };
 
   datasets = callPackage ../development/python-modules/datasets { };
 
@@ -2744,14 +2744,14 @@ in {
 
   fastjet = toPythonModule (pkgs.fastjet.override {
     withPython = true;
-    inherit python;
+    inherit (self) python;
   });
 
   fastjsonschema = callPackage ../development/python-modules/fastjsonschema { };
 
   fastnlo_toolkit = toPythonModule (pkgs.fastnlo_toolkit.override {
     withPython = true;
-    inherit python;
+    inherit (self) python;
   });
 
   fastnumbers = callPackage ../development/python-modules/fastnumbers { };
@@ -2793,6 +2793,8 @@ in {
   fido2 = callPackage ../development/python-modules/fido2 { };
 
   fields = callPackage ../development/python-modules/fields { };
+
+  file-read-backwards = callPackage ../development/python-modules/file-read-backwards { };
 
   filebrowser_safe = callPackage ../development/python-modules/filebrowser_safe { };
 
@@ -2886,6 +2888,8 @@ in {
 
   flask_elastic = callPackage ../development/python-modules/flask-elastic { };
 
+  flask-gravatar = callPackage ../development/python-modules/flask-gravatar { };
+
   flask-httpauth = callPackage ../development/python-modules/flask-httpauth { };
 
   flask-jwt-extended = callPackage ../development/python-modules/flask-jwt-extended { };
@@ -2906,6 +2910,8 @@ in {
 
   flask-paginate = callPackage ../development/python-modules/flask-paginate { };
 
+  flask-paranoid = callPackage ../development/python-modules/flask-paranoid { };
+
   flask_principal = callPackage ../development/python-modules/flask-principal { };
 
   flask-pymongo = callPackage ../development/python-modules/Flask-PyMongo { };
@@ -2923,6 +2929,8 @@ in {
   flask-seasurf = callPackage ../development/python-modules/flask-seasurf { };
 
   flask-session = callPackage ../development/python-modules/flask-session { };
+
+  flask-security-too = callPackage ../development/python-modules/flask-security-too { };
 
   flask-silk = callPackage ../development/python-modules/flask-silk { };
 
@@ -3729,6 +3737,8 @@ in {
 
   httmock = callPackage ../development/python-modules/httmock { };
 
+  httpagentparser = callPackage ../development/python-modules/httpagentparser { };
+
   httpauth = callPackage ../development/python-modules/httpauth { };
 
   httpbin = callPackage ../development/python-modules/httpbin { };
@@ -3950,6 +3960,8 @@ in {
   inquirer = callPackage ../development/python-modules/inquirer { };
 
   insegel = callPackage ../development/python-modules/insegel { };
+
+  installer = callPackage ../development/python-modules/installer { };
 
   intake = callPackage ../development/python-modules/intake { };
 
@@ -4865,6 +4877,8 @@ in {
 
   matrix-client = callPackage ../development/python-modules/matrix-client { };
 
+  matrix-common = callPackage ../development/python-modules/matrix-common { };
+
   matrix-nio = callPackage ../development/python-modules/matrix-nio { };
 
   mattermostdriver = callPackage ../development/python-modules/mattermostdriver { };
@@ -5057,6 +5071,8 @@ in {
   modestmaps = callPackage ../development/python-modules/modestmaps { };
 
   mohawk = callPackage ../development/python-modules/mohawk { };
+
+  mongomock = callPackage ../development/python-modules/mongomock { };
 
   mongodict = callPackage ../development/python-modules/mongodict { };
 
@@ -5839,6 +5855,8 @@ in {
 
   pdfx = callPackage ../development/python-modules/pdfx { };
 
+  pdm-pep517 = callPackage ../development/python-modules/pdm-pep517 { };
+
   pdoc3 = callPackage ../development/python-modules/pdoc3 { };
 
   pebble = callPackage ../development/python-modules/pebble { };
@@ -6032,6 +6050,8 @@ in {
 
   pynuki = callPackage ../development/python-modules/pynuki { };
 
+  pynut2 = callPackage ../development/python-modules/pynut2 { };
+
   pynws = callPackage ../development/python-modules/pynws { };
 
   pynx584 = callPackage ../development/python-modules/pynx584 { };
@@ -6097,6 +6117,8 @@ in {
   python-swiftclient = callPackage ../development/python-modules/python-swiftclient { };
 
   python-tado = callPackage ../development/python-modules/python-tado { };
+
+  pythonfinder = callPackage ../development/python-modules/pythonfinder { };
 
   pyutil = callPackage ../development/python-modules/pyutil { };
 
@@ -8831,6 +8853,8 @@ in {
 
   sentinel = callPackage ../development/python-modules/sentinel { };
 
+  sentinels = callPackage ../development/python-modules/sentinels { };
+
   sentry-sdk = callPackage ../development/python-modules/sentry-sdk { };
 
   sepaxml = callPackage ../development/python-modules/sepaxml { };
@@ -9074,6 +9098,8 @@ in {
     usePython = true;
   });
 
+  socketio-client = callPackage ../development/python-modules/socketio-client { };
+
   socialscan = callPackage ../development/python-modules/socialscan { };
 
   socid-extractor =  callPackage ../development/python-modules/socid-extractor { };
@@ -9145,6 +9171,8 @@ in {
   spdx-tools = callPackage ../development/python-modules/spdx-tools { };
 
   speaklater = callPackage ../development/python-modules/speaklater { };
+
+  speaklater3 = callPackage ../development/python-modules/speaklater3 { };
 
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
 
@@ -9925,6 +9953,8 @@ in {
 
   types-decorator = callPackage ../development/python-modules/types-decorator { };
 
+  types-freezegun = callPackage ../development/python-modules/types-freezegun { };
+
   types-futures = callPackage ../development/python-modules/types-futures { };
 
   types-protobuf = callPackage ../development/python-modules/types-protobuf { };
@@ -9934,6 +9964,8 @@ in {
   types-requests = callPackage ../development/python-modules/types-requests { };
 
   types-setuptools = callPackage ../development/python-modules/types-setuptools { };
+
+  types-tabulate = callPackage ../development/python-modules/types-tabulate { };
 
   types-toml = callPackage ../development/python-modules/types-toml { };
 
