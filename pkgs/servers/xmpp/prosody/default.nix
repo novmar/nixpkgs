@@ -1,11 +1,13 @@
 { stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
 , lua
+, pkgs
 , nixosTests
 , withLibevent ? true
 , withDBI ? true
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
 , withOnlyInstalledCommunityModules ? [ ]
+, withOwnerAllowKickPatch ? false
 , withCommunityModules ? [ ] }:
 
 with lib;
@@ -80,6 +82,10 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/prosody-migrator \
         --prefix LUA_PATH ';' "$LUA_PATH" \
         --prefix LUA_CPATH ';' "$LUA_CPATH"
+      ${lib.optionalString withOwnerAllowKickPatch ''
+        cat ${pkgs.jitsi-meet-prosody}/share/prosody-plugins/muc_owner_allow_kick.patch > $out/lib/prosody/modules/test
+        patch $out/lib/prosody/modules/muc/muc.lib.lua ${pkgs.jitsi-meet-prosody}/share/prosody-plugins/muc_owner_allow_kick.patch
+        ''}
     '';
 
   passthru = {
