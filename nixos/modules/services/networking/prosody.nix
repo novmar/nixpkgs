@@ -513,7 +513,7 @@ in
           pkgs.prosody.override {
             withExtraLibs = [ pkgs.luaPackages.lpty ];
             withCommunityModules = [ "auth_external" ];
-            withOwnerAllowKickPatch = true ;
+            withOwnerAllowKickPatch = true;
           };
         '';
       };
