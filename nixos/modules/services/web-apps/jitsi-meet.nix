@@ -178,7 +178,7 @@ in
       '';
     };
 
-    prosody.allowners_muc  = mkOption {
+    prosody.allowners_muc = mkOption {
       type = bool;
       default = false;
       description = ''
