@@ -172,10 +172,10 @@ in
 
     prosody.withOwnerAllowKickPatch = mkOption {
       type = bool;
-      default = false ;
+      default = false;
       description = ''
-       Patch prosody wit muc_owner_allow_kick.patch
-        '';
+       Patch prosody with muc_owner_allow_kick.patch
+      '';
     };
 
     prosody.allowners_muc  = mkOption {
