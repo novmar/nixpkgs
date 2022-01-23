@@ -1705,6 +1705,8 @@ in {
 
   cnvkit = callPackage ../development/python-modules/cnvkit { };
 
+  co2signal = callPackage ../development/python-modules/co2signal { };
+
   coapthon3 = callPackage ../development/python-modules/coapthon3 { };
 
   coconut = callPackage ../development/python-modules/coconut { };
@@ -2842,6 +2844,8 @@ in {
 
   flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
 
+  flake8-docstrings = callPackage ../development/python-modules/flake8-docstrings { };
+
   flake8-future-import = callPackage ../development/python-modules/flake8-future-import { };
 
   flake8-import-order = callPackage ../development/python-modules/flake8-import-order { };
@@ -3100,6 +3104,8 @@ in {
     enablePython = true;
     pythonPackages = self;
   });
+
+  gamble = callPackage ../development/python-modules/gamble { };
 
   gaphas = callPackage ../development/python-modules/gaphas { };
 
@@ -4000,6 +4006,8 @@ in {
   i-pi = callPackage ../development/python-modules/i-pi { };
 
   iptools = callPackage ../development/python-modules/iptools { };
+
+  ipwhl = callPackage ../development/python-modules/ipwhl { };
 
   ipy = callPackage ../development/python-modules/IPy { };
 
@@ -5194,6 +5202,8 @@ in {
   mutesync = callPackage ../development/python-modules/mutesync { };
 
   mutf8 = callPackage ../development/python-modules/mutf8 { };
+
+  mutmut = callPackage ../development/python-modules/mutmut { };
 
   mujson = callPackage ../development/python-modules/mujson { };
 
@@ -8939,6 +8949,8 @@ in {
   sievelib = callPackage ../development/python-modules/sievelib { };
 
   signedjson = callPackage ../development/python-modules/signedjson { };
+
+  sigrok = callPackage ../development/python-modules/sigrok { };
 
   sigtools = callPackage ../development/python-modules/sigtools { };
 
