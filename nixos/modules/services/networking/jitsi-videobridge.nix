@@ -242,8 +242,8 @@ in
         DynamicUser = true;
         User = "jitsi-videobridge";
         Group = "jitsi-meet";
-
-        CapabilityBoundingSet = "";
+        AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         NoNewPrivileges = true;
         ProtectSystem = "strict";
         ProtectHome = true;
