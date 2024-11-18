@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
       '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
       make -C tools/migration install
       ${lib.optionalString withOwnerAllowKickPatch ''
-        cat ${pkgs.jitsi-meet-prosody}/share/prosody-plugins/muc_owner_allow_kick.patch > $out/lib/prosody/modules/test
+        cat ${pkgs.jitsi-meet-prosody}/share/prosody-plugins/muc_owner_allow_kick-012.patch > $out/lib/prosody/modules/test
         patch $out/lib/prosody/modules/muc/muc.lib.lua ${pkgs.jitsi-meet-prosody}/share/prosody-plugins/muc_owner_allow_kick.patch
         ''}
     '';
