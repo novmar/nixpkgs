@@ -1,12 +1,14 @@
 { stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg, buildPackages
 , icu
 , lua
+, pkgs
 , nixosTests
 , withDBI ? true
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
 , withExtraLuaPackages ? _: [ ]
 , withOnlyInstalledCommunityModules ? [ ]
+, withOwnerAllowKickPatch ? false
 , withCommunityModules ? [ ] }:
 
 let
@@ -74,6 +76,10 @@ stdenv.mkDerivation rec {
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
       '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
       make -C tools/migration install
+      ${lib.optionalString withOwnerAllowKickPatch ''
+        cat ${pkgs.jitsi-meet-prosody}/share/prosody-plugins/muc_owner_allow_kick.patch > $out/lib/prosody/modules/test
+        patch $out/lib/prosody/modules/muc/muc.lib.lua ${pkgs.jitsi-meet-prosody}/share/prosody-plugins/muc_owner_allow_kick.patch
+        ''}
     '';
 
   passthru = {
