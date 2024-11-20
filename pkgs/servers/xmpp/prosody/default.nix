@@ -1,14 +1,12 @@
 { stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg, buildPackages
 , icu
 , lua
-, pkgs
 , nixosTests
 , withDBI ? true
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
 , withExtraLuaPackages ? _: [ ]
 , withOnlyInstalledCommunityModules ? [ ]
-, withOwnerAllowKickPatch ? false
 , withCommunityModules ? [ ] }:
 
 let

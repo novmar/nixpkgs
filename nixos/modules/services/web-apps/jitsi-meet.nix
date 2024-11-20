@@ -182,15 +182,6 @@ in
       '';
     };
     
-    prosody.withOwnerAllowKickPatch = mkOption
-    {
-      type = bool;
-      default = false ;
-      description = ''
-       Patch prosody wit muc_owner_allow_kick.patch
-        '';
-    };
-
     prosody.allowners_muc  = mkOption {
       type = bool;
       default = false;
@@ -236,9 +227,6 @@ in
     services.prosody = mkIf cfg.prosody.enable {
       enable = mkDefault true;
       xmppComplianceSuite = mkDefault false;
-      package = mkIf cfg.prosody.withOwnerAllowKickPatch (
-        pkgs.prosody.override { withOwnerAllowKickPatch = true ; }
-         );
       modules = {
         admin_adhoc = mkDefault false;
         bosh = mkDefault true;
