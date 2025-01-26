@@ -1,7 +1,7 @@
 { lib, rel, buildKodiBinaryAddon, fetchFromGitHub }:
 buildKodiBinaryAddon rec {
   pname = "pvr-sledovanitv_cz";
-  namespace = "pvr.sledovanitv_cz";
+  namespace = "pvr.sledovanitv.cz";
   version = "22.2.0";
 
   src = fetchFromGitHub {
