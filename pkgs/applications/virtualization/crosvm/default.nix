@@ -1,39 +1,56 @@
-{ lib, rustPlatform, fetchgit, fetchpatch
-, pkg-config, protobuf, python3, wayland-scanner
-, libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
-, pkgsCross
+{
+  lib,
+  rustPlatform,
+  fetchgit,
+  pkg-config,
+  protobuf,
+  python3,
+  wayland-scanner,
+  libcap,
+  libdrm,
+  libepoxy,
+  minijail,
+  virglrenderer,
+  wayland,
+  wayland-protocols,
+  writeShellScript,
+  unstableGitUpdater,
+  nix-update,
+  pkgsCross,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "crosvm";
-  version = "130.0";
+  version = "0-unstable-2025-03-14";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "9d42f918373f962b7d035ff52a1629e184cb496e";
-    hash = "sha256-h8nAZ4kTidblKNvugEEZUorBthjGi0FmImcBwYy4EHQ=";
+    rev = "af765802907dafe1ae1d1f39704c5020a882d362";
+    hash = "sha256-p15gljpEaSloorT37J8Akn5DaqkjVD/QInik4FaF1HE=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      name = "cross-domain.patch";
-      url = "https://chromium.googlesource.com/chromiumos/platform/crosvm/+/60053cdf0b360a03084292b39120365fff65d410%5E%21/?format=TEXT";
-      decode = "base64 -d";
-      hash = "sha256-U5eOxuAtVLjJ+8h16lmbJYNxsP/AOEv/1ec4WlUxP2E=";
-    })
-  ];
-
   separateDebugInfo = true;
 
-  cargoHash = "sha256-FvDJhmrSBShxRTpc23C0jEk9YRbtGyYgC1Z8ekxNnb8=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-3+gV/4l+N4U2zZWU+UtA1gcmdwnXavbhBPQOB3hhGDk=";
 
   nativeBuildInputs = [
-    pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner
+    pkg-config
+    protobuf
+    python3
+    rustPlatform.bindgenHook
+    wayland-scanner
   ];
 
   buildInputs = [
-    libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
+    libcap
+    libdrm
+    libepoxy
+    minijail
+    virglrenderer
+    wayland
+    wayland-protocols
   ];
 
   preConfigure = ''
@@ -46,7 +63,15 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ "virgl_renderer" ];
 
   passthru = {
-    updateScript = ./update.py;
+    updateScript = writeShellScript "update-crosvm.sh" ''
+      set -ue
+      ${lib.escapeShellArgs (unstableGitUpdater {
+        url = "https://chromium.googlesource.com/crosvm/crosvm.git";
+        hardcodeZeroVersion = true;
+      })}
+      exec ${lib.getExe nix-update} --version=skip
+    '';
+
     tests = {
       musl = pkgsCross.musl64.crosvm;
     };
@@ -58,6 +83,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "crosvm";
     maintainers = with maintainers; [ qyliss ];
     license = licenses.bsd3;
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 }
