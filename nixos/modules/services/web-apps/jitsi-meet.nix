@@ -562,10 +562,10 @@ in
         };
 
         locations."~ ^/(libs|css|static|images|fonts|lang|sounds|.well-known)/(.*)$" = {
-          alias = "${pkgs.jitsi-meet}/$1/$2"
+          alias = "${pkgs.jitsi-meet}/$1/$2" ;
           extraConfig = ''
                    add_header 'Access-Control-Allow-Origin' '*';
-          ''
+          '';
         };
 
         locations."=/http-bind" = {
