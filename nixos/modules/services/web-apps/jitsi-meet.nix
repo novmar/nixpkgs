@@ -561,8 +561,12 @@ in
           '';
         };
 
-####### pridat ??     location ~ ^/_api/public/(.*)$ {
-####### pridat     location ~ ^/(libs|css|static|images|fonts|lang|sounds|.well-known)/(.*)$
+        locations."~ ^/(libs|css|static|images|fonts|lang|sounds|.well-known)/(.*)$" = {
+          alias = "${pkgs.jitsi-meet}/$1/$2"
+          extraConfig = ''
+                   add_header 'Access-Control-Allow-Origin' '*';
+          ''
+        };
 
         locations."=/http-bind" = {
           proxyPass = "http://localhost:5280/http-bind?prefix=$prefix&$args";
@@ -576,9 +580,6 @@ in
           proxyPass = "http://localhost:5280/xmpp-websocket?prefix=$prefix&$args";
           proxyWebsockets = true;
         };
-####### pridat      # colibri (JVB) websockets for jvb1
-####### pridat     location ~ ^/conference-request/v1(\/.*)?$ {
-###### pridat      location ~ ^/([^/?&:'"]+)/conference-request/v1(\/.*)?$ {
         locations."~ ^/([^/?&:'\"]+)$" = {  
           tryFiles = "$uri @root_path";
           extraConfig = ''
