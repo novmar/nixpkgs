@@ -187,6 +187,16 @@ in
         off if you want to configure it manually.
       '';
     };
+
+    prosody.allowners_muc = mkOption {
+      type = bool;
+      default = false;
+      description = ''
+        Add module allowners, any user in chat is able to
+        kick other. Usefull in jitsi-meet to kick ghosts.
+      '';
+    };
+
     prosody.lockdown = mkOption {
       type = bool;
       default = false;
@@ -240,6 +250,7 @@ in
         {
           domain = "conference.${cfg.hostName}";
           name = "Jitsi Meet MUC";
+          allowners_muc = cfg.prosody.allowners_muc;
           roomLocking = false;
           roomDefaultPublicJids = true;
           extraConfig = ''
@@ -541,42 +552,76 @@ in
         root = pkgs.jitsi-meet;
         extraConfig = ''
           ssi on;
+           set $prefix "";
+           set $custom_index "";
+           set $config_js_location  "${overrideJs "${pkgs.jitsi-meet}/config.js" "config" (recursiveUpdate defaultCfg cfg.config) cfg.extraConfig}";
         '';
-        locations."@root_path".extraConfig = ''
-          rewrite ^/(.*)$ / break;
-        '';
-        locations."~ ^/([^/\\?&:'\"]+)$".tryFiles = "$uri @root_path";
-        locations."^~ /xmpp-websocket" = {
-          priority = 100;
-          proxyPass = "http://localhost:5280/xmpp-websocket";
-          proxyWebsockets = true;
-        };
-        locations."=/http-bind" = {
-          proxyPass = "http://localhost:5280/http-bind";
+        
+        locations."=/config.js" = mkDefault {
           extraConfig = ''
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header Host $host;
+          alias $config_js_location;
           '';
         };
         locations."=/external_api.js" = mkDefault {
           alias = "${pkgs.jitsi-meet}/libs/external_api.min.js";
         };
         locations."=/_api/room-info" = {
-          proxyPass = "http://localhost:5280/room-info";
+          proxyPass = "http://localhost:5280/room-info?prefix=$prefix&$args"; 
           extraConfig = ''
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header Host $host;
           '';
         };
-        locations."=/config.js" = mkDefault {
-          alias =
-            overrideJs "${pkgs.jitsi-meet}/config.js" "config" (recursiveUpdate defaultCfg cfg.config)
-              cfg.extraConfig;
+
+        locations."~ ^/(libs|css|static|images|fonts|lang|sounds|.well-known)/(.*)$" = {
+          alias = "${pkgs.jitsi-meet}/$1/$2" ;
+          extraConfig = ''
+                   add_header 'Access-Control-Allow-Origin' '*';
+          '';
+        };
+
+        locations."=/http-bind" = {
+          proxyPass = "http://localhost:5280/http-bind?prefix=$prefix&$args";
+          extraConfig = ''
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header Host $host;
+          '';
+        };
+        locations."^~ /xmpp-websocket" = {
+          priority = 100;
+          proxyPass = "http://localhost:5280/xmpp-websocket?prefix=$prefix&$args";
+          proxyWebsockets = true;
+        };
+        locations."~ ^/([^/?&:'\"]+)$" = {  
+          tryFiles = "$uri @root_path";
+          extraConfig = ''
+            set $roomname "$1";
+          '';
+        };
+
+        locations."@root_path".extraConfig = ''
+          rewrite ^/(.*)$ /$custom_index break;
+        '';
+
+        locations."~ ^/([^/?&:'\"]+)/config.js$" = {  
+          extraConfig = ''
+            set $roomname "$1";
+            set $subdir "$1/";
+            alias $config_js_location;
+          '';
+
         };
         locations."=/interface_config.js" = mkDefault {
           alias =
             overrideJs "${pkgs.jitsi-meet}/interface_config.js" "interfaceConfig" cfg.interfaceConfig
               "";
+        };
+        locations."~ ^/([^/?&:'\"]+)/(.*)$" = {  
+          extraConfig = ''
+        set $subdomain "$1.";
+        set $subdir "$1/";
+        rewrite ^/([^/?&:'"]+)/(.*)$ /$2;
+          '';
         };
         locations."/socket.io/" = mkIf cfg.excalidraw.enable {
           proxyPass = "http://127.0.0.1:${toString cfg.excalidraw.port}";
